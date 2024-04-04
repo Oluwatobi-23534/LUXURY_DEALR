@@ -1,0 +1,136 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap'); */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+
+
+/* @media (max-width: 375px) {
+  .search-container {
+    gap: 24px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .search-container {
+    gap: 10px !important;
+  }
+}
+
+@media (min-width: 390px) {
+  .search-container {
+    gap: 40px !important;
+  }
+}
+
+@media (min-width: 414px) {
+  .search-container {
+    gap: 64px !important;
+  }
+}
+
+@media (min-width: 412px) {
+  .search-container {
+    gap: 62px !important;
+  }
+}
+
+@media (min-width: 430px) {
+  .search-container {
+    gap: 80px !important;
+  }
+} */
+
+
+
+html {
+  scroll-behavior: smooth;
+}
+/* /* body {
+  font-family: 'Open Sans', sans-serif;
+} */
+
+/* h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
+}  */
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;700&display=swap');
+
+
+body {
+  font-family: 'Dosis', sans-serif;
+}
+
+.input-box-shadow {
+  filter: drop-shadow(-4px -4px 44px rgba(0, 0, 0, 0.08));
+} */
+
+body {
+  font-family: 'Times Sans Serif', serif;
+}
+
+
+
+@keyframes bannerEnter {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bannerExit {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+.banner-enter {
+  animation: bannerEnter 2s forwards;
+}
+
+.banner-exit {
+  animation: bannerExit 2s forwards;
+}
+
+
+
+
+
+.product-list {
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 10px;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  
+  gap: 1rem;
+  padding: 100px;
+  background-color: #007BFF; /* A nice shade of blue */
+  color: #FFFFFF; /* White text to contrast with the blue background */
+}
+
+.subcategory {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.item {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  text-align: center;
+}
+
+
+.meeting-form {
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+
