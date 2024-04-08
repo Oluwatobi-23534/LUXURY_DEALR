@@ -48,6 +48,28 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    getUsers: builder.query({
+      query: () => ({
+        url: USERS_URL,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    getUser: builder.query({
+      query: (id) => ({
+        url: `${USERS_URL}/${id}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+
+    updateUser: builder.mutation({
+      query: (user) => ({
+        url: `${USERS_URL}/${user.id}`,
+        method: "PUT",
+        body: user,
+      }),
+    }),
   }),
 });
 
@@ -58,4 +80,7 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useUpdateUserprofileMutation,
+  useGetUsersQuery,
+  useGetUserQuery,
+  useUpdateUserMutation
 } = userApiSlice;
