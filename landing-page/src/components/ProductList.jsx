@@ -39,10 +39,9 @@ const ProductList = () => {
                     {subcategory.name}
                   </HashLink>
                 </h2>
-
                 {subcategory.items.map((item) => (
-                  <div key={item.name} className="item">
-                    <p>{item.name}</p>
+                  <div key={item.name} className="">
+                    <p className="item rounded-lg">{item.name}</p>
                   </div>
                 ))}
               </div>
@@ -51,6 +50,8 @@ const ProductList = () => {
         ))}
     </div>
   );
+
+
 
 
 };

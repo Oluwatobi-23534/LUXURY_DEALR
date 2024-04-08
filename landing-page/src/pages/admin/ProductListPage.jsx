@@ -2,7 +2,7 @@ import React from "react";
 
 import Loader from "../../components/Loader";
 import { toast } from "react-toastify";
-import { useGetProductsQuery } from "../../slices/productsApiSlice";
+import { useDeleteProductMutation, useGetProductsQuery } from "../../slices/productsApiSlice";
 import { useNavigate } from "react-router-dom"
 
 
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 
 const ProductListPage = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const [deleteProduct, {isLoading: loadingDelete}] = useDeleteProductMutation()
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -24,6 +25,19 @@ const ProductListPage = () => {
   const editProductHandler = (id) => {
     navigate(`/admin/product/${id}/edit`)
     refetch();
+  }
+
+  const deleteProductHandler = async id => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        const res = await deleteProduct(id)
+        refetch()
+        toast.success(res.message)
+        
+      } catch (error) {
+        toast.error(error?.data?.message || error?.error);
+      }
+    }
   }
 
   return (
@@ -93,12 +107,13 @@ const ProductListPage = () => {
                 <button className="mr-2 bg-blue-500 hover:bg-blue-700 text-white p-2 rounded" onClick={() => editProductHandler(product._id)}>
                   Edit
                 </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white p-2 rounded">
+                <button className="bg-red-500 hover:bg-red-700 text-white p-2 rounded" onClick={() =>deleteProductHandler(product._id)}>
                   Delete
                 </button>
               </td>
             </tr>
           ))}
+          {loadingDelete && <Loader />}
         </tbody>
       </table>
     </div>

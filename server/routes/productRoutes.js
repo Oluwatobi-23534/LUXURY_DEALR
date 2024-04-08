@@ -6,6 +6,7 @@ import {
   getCategoriesbyId,
 } from "../controllers/categoriesController.js";
 import {
+  deleteProduct,
   getProductById,
   getProducts,
   getProductsByCategory,
@@ -33,7 +34,11 @@ router.route("/subcategories/:id").get(getSubcategoryById);
 
 router.route("/products").get(getProducts);
 
-router.route("/products/:id").get(getProductById).put(protect, admin, updateProduct);
+router
+  .route("/products/:id")
+  .get(getProductById)
+  .put(protect, admin, updateProduct)
+  .delete(protect, admin, deleteProduct);
 
 router.route("/products/category/:categoryName").get(getProductsByCategory);
 
@@ -50,8 +55,6 @@ router.post("/upload", upload.array("images"), (req, res) => {
   }));
 
   res.json(fileInfos);
-
- 
 });
 
 export default router;

@@ -76,10 +76,35 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteProduct = asyncHandler(async (req, res) => {
+  const productId = req.params.id;
+
+  const product = await Product.findById(productId);
+
+  if (product) {
+    // Delete the product from the products collection
+    await Product.deleteOne({ _id: product._id });
+
+    // Also remove the product from the subcategories collection
+    // This assumes that your Subcategory model has an `items` array that contains Item objects
+    await Subcategory.updateMany(
+      { "items._id": product._id },
+      { $pull: { items: { _id: product._id } } }
+    );
+
+    res.json({ message: "Product deleted" });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+
 export {
   getProducts,
   getProductById,
   getProductsByCategory,
   getProductsBySubcategory,
   updateProduct,
+  deleteProduct,
 };
