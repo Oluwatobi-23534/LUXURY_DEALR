@@ -6,6 +6,7 @@ import {
   getCategoriesbyId,
 } from "../controllers/categoriesController.js";
 import {
+  createProductReview,
   deleteProduct,
   getProductById,
   getProducts,
@@ -39,6 +40,8 @@ router
   .get(getProductById)
   .put(protect, admin, updateProduct)
   .delete(protect, admin, deleteProduct);
+
+router.route("/products/:id/review").post(protect, admin, createProductReview);
 
 router.route("/products/category/:categoryName").get(getProductsByCategory);
 

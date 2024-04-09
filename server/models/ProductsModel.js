@@ -1,9 +1,23 @@
 import mongoose, { Schema } from "mongoose";
 
-const RatingSchema = new Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  rating: Number,
-  review: String,
+const ReviewSchema = new Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User"
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
 });
 
 const ProductSchema = new Schema(
@@ -49,7 +63,17 @@ const ProductSchema = new Schema(
       required: true,
       default: 1,
     },
-    ratings: [RatingSchema],
+    reviews: [ReviewSchema],
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numReviews: {
+      type: Number,
+      required: true,
+      default: 0,
+    }
   },
   { timestamps: true }
 );

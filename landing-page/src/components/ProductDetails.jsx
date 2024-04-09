@@ -6,7 +6,10 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
-import { useGetProductsBySubcategoryQuery } from "../slices/productsApiSlice";
+import {
+  useCreateReviewMutation,
+  useGetProductsBySubcategoryQuery,
+} from "../slices/productsApiSlice";
 import { addToBucket } from "../slices/bucketListSlice";
 
 const ProductDetails = () => {
@@ -17,8 +20,15 @@ const ProductDetails = () => {
   // State for managing quantities
   const [quantities, setQuantities] = useState({});
 
-  const { data, isLoading, isError, error } =
+  // State for managing comments/ratings
+  const [userComment, SetUserComment] = useState("");
+  const [userRating, SetUserRating] = useState(5);
+
+  const { data, isLoading, isError, error, refetch } =
     useGetProductsBySubcategoryQuery(subcategoryId);
+
+  const [createReview, { isloading: LoadingCreateReview }] =
+    useCreateReviewMutation();
 
   const products = data?.products;
   const subcategory = data?.subcategory;
@@ -42,12 +52,30 @@ const ProductDetails = () => {
     navigate("/bucketlist");
   };
 
- const handleQuantityChange = (id, newQuantity) => {
-   setQuantities({
-     ...quantities,
-     [id]: newQuantity || "", // Set to an empty string when newQuantity is not a number
-   });
- };
+  const handleQuantityChange = (id, newQuantity) => {
+    setQuantities({
+      ...quantities,
+      [id]: newQuantity || "", // Set to an empty string when newQuantity is not a number
+    });
+  };
+
+  const handleCreateReview = async (e, productId) => {
+    // Add productId as a parameter
+    e.preventDefault();
+
+    try {
+      const res = await createReview({
+        productId, // Use the productId passed into the function
+        rating: userRating,
+        comment: userComment,
+      }).unwrap();
+      toast.success(res.message);
+      SetUserComment("");
+      refetch();
+    } catch (error) {
+      toast.error(error.data.message || error?.error);
+    }
+  };
 
 
   if (isLoading) {
@@ -57,12 +85,8 @@ const ProductDetails = () => {
 
   if (isError) {
     // Show an error message
-      return <div>Error: {error.message}</div>;
-      
+    return <div>Error: {error.message}</div>;
   }
-
- 
-
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50 lg:pt-28 pt-12">
@@ -150,12 +174,60 @@ const ProductDetails = () => {
                       }
                     />
                   </div>
+
                   <button
                     className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
                     onClick={() => handleAddToBucket(product)}
                   >
                     Place Your Order
                   </button>
+
+                  {/* Add a form for submitting reviews */}
+                  <form className="mt-12 bg-blue-100 p-4 rounded">
+                    <h3 className="text-lg font-semibold text-blue-700 mb-4">
+                      Write a Review:
+                    </h3>
+                    <label
+                      htmlFor={`comment-${product._id}`}
+                      className="text-sm text-blue-600"
+                    >
+                      Comment:
+                    </label>
+                    <textarea
+                      id={`comment-${product._id}`}
+                      className="ml-2 text-sm text-blue-600 border border-gray-300 p-1 w-full"
+                      value={userComment}
+                      onChange={(e) => SetUserComment(e.target.value)}
+                      required
+                    />
+                    <label
+                      htmlFor={`rating-${product._id}`}
+                      className="text-sm text-blue-600 mt-4"
+                    >
+                      Rating:
+                    </label>
+                    <select
+                      id={`rating-${product._id}`}
+                      className="ml-2 text-sm text-blue-600 border border-gray-300 p-1 w-16"
+                      value={userRating}
+                      onChange={(e) => SetUserRating(e.target.value)}
+                      required
+                    >
+                      <option value="">Select...</option>
+                      <option value="1">1 - Poor</option>
+                      <option value="2">2 - Fair</option>
+                      <option value="3">3 - Good</option>
+                      <option value="4">4 - Very Good</option>
+                      <option value="5">5 - Excellent</option>
+                    </select>
+                    <button
+                      type="submit"
+                      className="mt-4 ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                      onClick={(e) => handleCreateReview(e, product._id)}
+                    >
+                      Submit Review
+                    </button>
+                  </form>
                 </div>
               ))}
           </div>
