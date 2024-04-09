@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import {
   useUpdateUserMutation,
   useGetUserQuery,
+  
 } from "../../slices/userApiSlice";
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
@@ -20,6 +21,8 @@ const UserEditPage = () => {
       isLoading: isUserLoading,
       error: userError,
     } = useGetUserQuery(id);
+
+    
 
      useEffect(() => {
        if (user) {
@@ -38,7 +41,15 @@ const UserEditPage = () => {
         } catch (error) {
             return toast.error(error?.data?.message || error?.error);
         }
-    }
+  }
+  
+  if (isLoading) {
+    <Loader />;
+  }
+
+  if (userError) {
+    toast.error(userError.messsage);
+  }
     
  return (
    <div className="flex flex-col pt-40 items-center bg-blue-50 text-blue-900 min-h-screen">

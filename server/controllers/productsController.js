@@ -92,7 +92,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
       { $pull: { items: { _id: product._id } } }
     );
 
-    res.json({ message: "Product deleted" });
+    res.status(204).json({ message: "Product deleted" });
   } else {
     res.status(404);
     throw new Error("Product not found");

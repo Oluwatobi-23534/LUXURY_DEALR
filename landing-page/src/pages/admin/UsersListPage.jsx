@@ -1,10 +1,36 @@
 import React from "react";
-import { useGetUsersQuery } from "../../slices/userApiSlice";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "../../slices/userApiSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loader from "../../components/Loader";
 
 const UsersListPage = () => {
   const { data: users, isLoading, error, refetch } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
   const navigate = useNavigate();
+
+  const deleteUserHandler = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        const res = await deleteUser(id);
+        toast.success(res.message)
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error?.error);
+      }
+    }
+  };
+
+  if (isLoading) {
+    <Loader />;
+  }
+
+  if (error) {
+    toast.error(error.messsage);
+  }
 
   return (
     <div className="mx-auto py-28 px-8 bg-white text-blue-900">
@@ -55,7 +81,7 @@ const UsersListPage = () => {
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white p-2 rounded"
-                      // onClick={() => deleteProductHandler(product._id)}
+                      onClick={() => deleteUserHandler(user._id)}
                     >
                       Delete
                     </button>
