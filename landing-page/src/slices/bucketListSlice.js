@@ -54,7 +54,7 @@ const bucketListSlice = createSlice({
       state.shippingAddress = action.payload;
       localStorage.setItem("shippingAddress", JSON.stringify(state.shippingAddress));
     },
-    savePaymentmethod: (state, action) => {
+    savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
       localStorage.setItem("paymentMethod", JSON.stringify(state.paymentMethod));
     },
@@ -95,7 +95,7 @@ export const {
   addToBucket,
   removeFromBucket,
   saveShippingAddress,
-  savePaymentmethod,
+  savePaymentMethod,
   loadState, // Add loadState action
   clearBucketItems, // Add clearBuckettItems action
 } = bucketListSlice.actions;

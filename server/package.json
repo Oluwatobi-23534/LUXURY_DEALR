@@ -27,6 +27,8 @@
     "nodemailer": "^6.9.11",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "paystack": "^2.0.1",
+    "react-paystack": "^5.0.0",
     "stripe": "^14.21.0"
   }
 }

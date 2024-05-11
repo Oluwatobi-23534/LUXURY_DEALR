@@ -82,6 +82,7 @@ const ItemSchema = new Schema(
   {
     _id: mongoose.Schema.Types.ObjectId,
     name: String,
+    product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
   },
   { timestamps: true }
 );

@@ -64,13 +64,13 @@ const BucketList = () => {
                     />
                   </td>
                   <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center">
-                    ${item.itemPrice.toFixed(2)}
+                    ₦{item.itemPrice.toFixed(2)}
                   </td>
                   <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center">
                     {item.qty}
                   </td>
                   <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center">
-                    ${item.totalItemPrice.toFixed(2)}
+                    ₦{item.totalItemPrice.toFixed(2)}
                   </td>
                   <td className="px-2 sm:px-4 py-2 border-2 border-gray-200 text-center">
                     <button
@@ -116,7 +116,7 @@ const BucketList = () => {
         </div>
       )}
       <p className="text-xl sm:text-2xl font-bold mt-4 text-center text-green-500 border-t-2 border-green-500 pt-4">
-        💎 Grand Total: ${totalPrice.toFixed(2)} 💎
+        💎 Grand Total: ₦{totalPrice.toFixed(2)} 💎
       </p>
     </div>
   );

@@ -13,6 +13,7 @@ import passport from "./utils/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import upload from "./upload.js";
+import stripe from "./utils/stripe.js";
 
 dotenv.config();
 
@@ -43,6 +44,8 @@ passport(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+stripe(app)
 
 // Serve static files from the "images" directory
 app.use("/images", express.static(path.join(__dirname, "database", "images")));

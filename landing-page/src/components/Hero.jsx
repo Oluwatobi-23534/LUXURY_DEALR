@@ -9,9 +9,11 @@ import { BACKEND_URL } from "../constants";
 import { toast } from "react-toastify";
 import { setCredentials, setWelcomeMessage } from "../slices/userSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 
 const Hero = () => {
+  
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const welcomeMessage = useSelector((state) => state.user.welcomeMessage);

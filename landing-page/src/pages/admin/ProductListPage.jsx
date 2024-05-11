@@ -3,16 +3,20 @@ import React from "react";
 import Loader from "../../components/Loader";
 import { toast } from "react-toastify";
 import { useDeleteProductMutation, useGetProductsQuery } from "../../slices/productsApiSlice";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import Paginate from "../../components/Paginate";
+import { useSelector } from "react-redux";
 
 
 
 
 
-const ProductListPage = () => {
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+const ProductListPage = () => {    
+  const navigate = useNavigate();
+  const {currentPage} = useParams()
+  const { data, isLoading, error, refetch } = useGetProductsQuery({currentPage});
   const [deleteProduct, {isLoading: loadingDelete}] = useDeleteProductMutation()
-  const navigate = useNavigate()
+  const {userInfo} = useSelector(state => state.user)
 
   if (isLoading) {
     return <Loader/>
@@ -41,12 +45,11 @@ const ProductListPage = () => {
   }
 
   return (
-    <div className="overflow-x-auto py-20 px-12 bg-blue-100">
+    <div className="overflow-x-auto py-20 px-12 bg-blue-100 min-h-screen">
       <div className="flex items-center justify-between">
         <h2 className="text-sm sm:text-2xl font-semibold mb-2 sm:mb-4 text-blue-800">
           Products
         </h2>
-        
       </div>
 
       <table className="min-w-full divide-y divide-blue-200 shadow-lg">
@@ -82,7 +85,7 @@ const ProductListPage = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-blue-200">
-          {products?.map((product) => (
+          {data?.products?.map((product) => (
             <tr key={product._id}>
               <td className="px-6 py-4 whitespace-nowrap">{product._id}</td>
               <td className="px-6 py-4 whitespace-nowrap">{product.name}</td>
@@ -104,10 +107,16 @@ const ProductListPage = () => {
               <td className="px-6 py-4 whitespace-nowrap">${product.price}</td>
               <td className="px-6 py-4 whitespace-nowrap">{product.brand}</td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <button className="mr-2 bg-blue-500 hover:bg-blue-700 text-white p-2 rounded" onClick={() => editProductHandler(product._id)}>
+                <button
+                  className="mr-2 bg-blue-500 hover:bg-blue-700 text-white p-2 rounded"
+                  onClick={() => editProductHandler(product._id)}
+                >
                   Edit
                 </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white p-2 rounded" onClick={() =>deleteProductHandler(product._id)}>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white p-2 rounded"
+                  onClick={() => deleteProductHandler(product._id)}
+                >
                   Delete
                 </button>
               </td>
@@ -116,6 +125,13 @@ const ProductListPage = () => {
           {loadingDelete && <Loader />}
         </tbody>
       </table>
+      <div className="flex justify-center mt-12">
+        <Paginate
+          pages={data.pages}
+          page={data.currentPage}
+          isAdmin={userInfo.isAdmin}
+        />
+      </div>
     </div>
   );
 

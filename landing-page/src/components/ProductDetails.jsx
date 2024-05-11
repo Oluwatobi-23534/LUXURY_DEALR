@@ -147,7 +147,7 @@ const ProductDetails = () => {
                     Subcategory: {product.subcategoryName}
                   </p>
                   <p className="mt-2 text-sm text-blue-600">
-                    Price: ${product.price}
+                    Price: ₦{product.price}
                   </p>
                   <p className="mt-2 text-sm text-blue-600">
                     In Stock: {product.inStock ? "Yes" : "No"}
@@ -181,6 +181,33 @@ const ProductDetails = () => {
                   >
                     Place Your Order
                   </button>
+
+                  {/* Display customer reviews */}
+                  <div className="mt-12 w-full bg-blue-50 p-2 rounded-md">
+                    <h3 className="text-lg font-semibold text-blue-700 mb-2">
+                      Customer Reviews:
+                    </h3>
+                    {product.reviews.length > 0 ? (
+                      product.reviews.map((review, reviewIndex) => (
+                        <div key={reviewIndex} className="border-t pt-2">
+                          <p className="text-sm text-blue-600">
+                            Rating: {"⭐".repeat(review.rating)}
+                          </p>
+                          <p className="text-sm text-blue-600">
+                            Comment: {review.comment}
+                          </p>
+                          <p className="text-sm text-blue-600">
+                            By: {review.name}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-blue-600">
+                        No reviews yet. Be the first to share your thoughts on
+                        this product!
+                      </p>
+                    )}
+                  </div>
 
                   {/* Add a form for submitting reviews */}
                   <form className="mt-12 bg-blue-100 p-4 rounded">

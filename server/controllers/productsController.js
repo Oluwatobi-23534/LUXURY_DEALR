@@ -2,13 +2,26 @@ import { Subcategory, Product } from "../models/ProductsModel.js";
 import asyncHandler from "express-async-handler";
 
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  if (!products) {
-    res.status(404);
-    throw new Error("No products found");
-  } else {
-    res.json(products);
-  }
+  const currentPage = +req.query.currentPage || 1;
+  const pageSize = process.env.PAGINATION_LIMIT;
+
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+  const count = await Product.countDocuments({ ...keyword });
+
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (currentPage - 1));
+
+  // No need to check if the array is empty and throw an error
+  // Just send the products array as it is (it could be empty)
+  res.json({ products, currentPage, pages: Math.ceil(count / pageSize) });
 });
 
 const getProductById = asyncHandler(async (req, res) => {
@@ -71,8 +84,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     const updatedProduct = await product.save();
     res.json(updatedProduct);
   } else {
-    res.status(404)
-    throw new Error("Product not found!")
+    res.status(404);
+    throw new Error("Product not found!");
   }
 });
 
@@ -136,8 +149,6 @@ const createProductReview = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 });
-
-
 
 export {
   getProducts,

@@ -71,12 +71,20 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    updateUserOrders: builder.mutation({
+      query: (orderData) => ({
+        url: `${USERS_URL}/orders`, // Replace with your actual endpoint
+        method: "POST", // Replace with your actual method
+        body: orderData,
+      }),
+    }),
+
     deleteUser: builder.mutation({
-      query: id => ({
+      query: (id) => ({
         url: `${USERS_URL}/${id}`,
         method: "DELETE",
-      })
-    })
+      }),
+    }),
   }),
 });
 
@@ -90,5 +98,6 @@ export const {
   useGetUsersQuery,
   useGetUserQuery,
   useUpdateUserMutation,
+  useUpdateUserOrdersMutation,
   useDeleteUserMutation
 } = userApiSlice;

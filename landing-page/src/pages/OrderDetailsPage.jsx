@@ -2,33 +2,72 @@ import React, { useEffect, useState } from "react";
 import {
   useDeliverOrderMutation,
   useGetOrderByIdQuery,
-  useGetOrderDetailsQuery,
-  usePayWithStripeMutation,
   useUpdateOrderToPaidMutation,
 } from "../slices/orderApiSlice";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import { PaystackButton } from "react-paystack";
 
 const OrderDetailsPage = () => {
+  const navigate = useNavigate();
   const { id: orderId } = useParams();
-
   const { userInfo } = useSelector((state) => state.user);
-
   const {
     data: order,
     isLoading,
     error,
     refetch,
-  } = useGetOrderByIdQuery(orderId); // Use useGetOrderByIdQuery here
-
-  const [payWithStripe, { isLoading: loadingStripe }] =
-    usePayWithStripeMutation();
-  const [isPaid, setIsPaid] = useState(false);
-  const [updateOrderToPaid] = useUpdateOrderToPaidMutation();
+  } = useGetOrderByIdQuery(orderId);
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
+  const [updateOrderToPaid] = useUpdateOrderToPaidMutation();
+  const [isPaid, setIsPaid] = useState(false);
+
+  const calculateTotal = (orderItems) => {
+    return orderItems.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+  };
+
+  const publicKey = "pk_test_3e5d96895f4d5046ed8a208eaa6958a624b1bd31"; // replace with your actual public key
+  const email = userInfo.email; // replace with the actual email of the user
+  const amount =
+    order && order.orderItems ? calculateTotal(order.orderItems) * 100 : 0;
+  // convert to kobo
+
+  const componentProps = {
+    email,
+    amount,
+    metadata: {
+      name: userInfo.name || "N/A",
+      phone: userInfo.phone || "N/A",
+    },
+    publicKey,
+    text: "Pay Now",
+    onSuccess: () => {
+      console.log("Payment successful!");
+      updateOrderToPaid(orderId)
+        .then(() => {
+          setIsPaid(true);
+          toast.success("Your purchase was successful!");
+          navigate("/success-page");
+        })
+        .catch((error) => {
+          console.error("Error updating order to paid:", error);
+        });
+    },
+    onClose: () => {
+      console.log("Payment dialog closed!");
+      toast.error("Wait! You need to complete your payment!");
+    },
+  };
+
+
+  // Log the componentProps to the console
+  console.log("componentProps:", componentProps);
 
   useEffect(() => {
     if (order) {
@@ -47,31 +86,10 @@ const OrderDetailsPage = () => {
 
   const { shippingAddress, user, isDelivered, orderItems } = order;
 
-  const calculateTotal = (orderItems) => {
-    return orderItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-  };
-
-  const handleStripePayment = async (orderItems) => {
-    try {
-      const res = await payWithStripe(orderItems).unwrap();
-      window.location.href = res.url;
-
-      // Call the mutation to update the order status in the database
-      await updateOrderToPaid(orderId); // replace orderId with the actual ID of the order
-
-      setIsPaid(true);
-    } catch (error) {
-      toast.error(error?.data?.message || error?.error);
-    }
-  };
-
   const handleMarkAsDelivered = async (orderId) => {
     await deliverOrder(orderId);
-    refetch()
-  }
+    refetch();
+  };
 
   return (
     <div className="flex flex-col md:flex-row justify-center items-start p-4 md:p-8 mt-8 mb-8 md:mt-24">
@@ -139,7 +157,7 @@ const OrderDetailsPage = () => {
                   {item.quantity}
                 </td>
                 <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center text-blue-600">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  ₦{(item.price * item.quantity).toFixed(2)}
                 </td>
               </tr>
             ))}
@@ -148,19 +166,18 @@ const OrderDetailsPage = () => {
 
         <div className="mt-4">
           <p className="text-right font-semibold text-blue-800">
-            Total: ${calculateTotal(orderItems).toFixed(2)}
+            Total: ₦{calculateTotal(orderItems).toFixed(2)}
           </p>
         </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded w-full mt-4"
-          onClick={() => handleStripePayment(orderItems)}
-        >
-          {isPaid
-            ? "Paid with Stripe"
-            : userInfo.isAdmin
-            ? "Payment Pending"
-            : "Pay with Stripe"}
-        </button>
+
+        <PaystackButton
+          className={`cursor-pointer text-center text-xs tracking-wider uppercase font-bold text-blue-200 border-none rounded-full w-full h-12 mt-10 ${
+            isPaid ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+          }`}
+          {...componentProps}
+          text={isPaid ? "Paid with Paystack" : "Pay with Paystack"}
+          disabled={isPaid}
+        />
 
         {userInfo.isAdmin && !order.isDelivered && (
           <button
@@ -170,7 +187,7 @@ const OrderDetailsPage = () => {
             Mark as Delivered
           </button>
         )}
-        {loadingStripe && <Loader />}
+        {loadingDeliver && <Loader />}
       </div>
     </div>
   );

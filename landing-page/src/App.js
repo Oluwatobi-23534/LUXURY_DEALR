@@ -29,6 +29,9 @@ import OrderListPage from "./pages/admin/OrderListPage";
 import ProductEditPage from "./pages/admin/ProductEditPage";
 import UsersListPage from "./pages/admin/UsersListPage";
 import UserEditPage from "./pages/admin/UserEditPage";
+import SearchProducts from "./components/SearchProducts";
+import SingleProductDetails from "./components/SingleProductDetails";
+
 
 const App = () => {
   return (
@@ -38,12 +41,21 @@ const App = () => {
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/search/:keyword" element={<SearchProducts />} />
+            <Route path="/page/:currentPage" element={<SearchProducts />} />
+            <Route
+              path="search/:keyword/page/:currentPage"
+              element={<SearchProducts />}
+            />
             <Route path="/products" element={<ProductList />} />
             <Route
               path="/products/subcategory/:subcategoryId"
               element={<ProductDetails />}
             />
-
+            <Route
+              path="/products/:productId"
+              element={<SingleProductDetails />}
+            />
             {/* <Route
               path="/category/vr-products/virtual-reality-headsets"
               element={<VRProductDetails />}
@@ -56,7 +68,6 @@ const App = () => {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/register" element={<Register />} />
             <Route path="/bucketlist" element={<BucketList />} />
-
             {/* private routes */}
             <Route
               path="/shipping"
@@ -106,18 +117,20 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-
             {/* admin routes */}
             <Route path="/" element={<AdminRoute />}>
               {/* <Route path="/admin/users" element={<UserListingPage />} /> */}
               <Route path="/admin/categories" element={<CategoryListPage />} />
               <Route path="/admin/products" element={<ProductListPage />} />
+              <Route path="/admin/products/:currentPage" element={<ProductListPage />} />
               <Route path="/admin/orders" element={<OrderListPage />} />
               <Route path="/admin/users" element={<UsersListPage />} />
               <Route path="/admin/users/:id/edit" element={<UserEditPage />} />
-              <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
+              <Route
+                path="/admin/product/:id/edit"
+                element={<ProductEditPage />}
+              />
             </Route>
-
             <Route
               path="/reset-password/:resetToken"
               element={<ResetPassword />}

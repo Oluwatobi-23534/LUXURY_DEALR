@@ -14,8 +14,9 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     getProducts: builder.query({
-      query: () => ({
+      query: ({ keyword, currentPage }) => ({
         url: PRODUCTS_URL,
+        params: { keyword, currentPage },
       }),
       keepUnusedDataFor: 5,
     }),
@@ -50,10 +51,10 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
 
     createReview: builder.mutation({
-      query: data => ({
+      query: (data) => ({
         url: `${PRODUCTS_URL}/${data.productId}/review`,
         method: "POST",
-        body: data
+        body: data,
       }),
     }),
 
@@ -70,7 +71,7 @@ export const {
   useGetCategoriesQuery,
   useCreateCategoryMutation,
   useGetProductsQuery,
-  useGetProductDetailsQuery,
+  useGetProductsDetailsQuery,
   useGetProductsBySubcategoryQuery,
   useUpdateProductMutation,
   useDeleteProductMutation,

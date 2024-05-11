@@ -38,6 +38,14 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         body: orderItems,
       }),
     }),
+
+    payWithPaystack: builder.mutation({
+      query: (orderItems) => ({
+        url: `${BACKEND_URL}/create-paystack-payment`,
+        method: "POST",
+        body: orderItems,
+      }),
+    }),
     deliverOrder: builder.mutation({
       query: (orderId) => ({
         url: `${ORDERS_URL}/deliver/${orderId}`,
@@ -65,4 +73,5 @@ export const {
   useDeliverOrderMutation,
   useUpdateOrderToPaidMutation,
   useGetOrderByIdQuery,
+  usePayWithPaystackMutation,
 } = orderApiSlice;

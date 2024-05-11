@@ -109,7 +109,7 @@ const PlaceOrder = () => {
                   {item.qty}
                 </td>
                 <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center text-blue-600">
-                  ${(item.price * item.qty).toFixed(2)}
+                  ₦{(item.price * item.qty).toFixed(2)}
                 </td>
               </tr>
             ))}
@@ -118,7 +118,7 @@ const PlaceOrder = () => {
 
         <div className="mt-4">
           <p className="text-right font-semibold text-blue-800">
-            Total: ${totalPrice}
+            Total: ₦{totalPrice}
           </p>
         </div>
         <button
@@ -136,3 +136,7 @@ const PlaceOrder = () => {
 };
 
 export default PlaceOrder;
+
+
+
+

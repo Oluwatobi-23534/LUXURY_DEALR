@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShippingFast } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,13 +34,27 @@ const Shipping = () => {
        country,
        phoneNumber,
      };
+
+     // Log the shippingAddress for debugging
+     console.log("Shipping Address:", shippingAddress);
+
+     // Dispatch the action
      dispatch(saveShippingAddress(shippingAddress));
 
-     // Save to local storage
-     localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+     console.log("Shipping address saved successfully");
 
-      navigate("/payment");
+     // Save to local storage
+     try {
+       localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+       console.log("Shipping address saved to localStorage");
+     } catch (error) {
+       console.error("Error saving shipping address to localStorage:", error);
+     }
+
+     navigate("/payment");
    };
+
+
 
 
 

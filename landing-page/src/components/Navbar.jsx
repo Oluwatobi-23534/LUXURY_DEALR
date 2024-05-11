@@ -1,8 +1,9 @@
 import { HashLink } from "react-router-hash-link";
 import { useState, useRef, useEffect } from "react";
 import "../index.css";
+
 import { menu, close } from "../assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { list } from "../assets";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -22,13 +23,15 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const {keyword: urlKeyword} = useParams();
+
   const [logoutApi] = useLogoutMutation();
   const [toggle, setToggle] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const timerRef = useRef(null);
   const handleClick = () => setToggle(!toggle);
 
-  // const [showModal, setShowModal] = useState(false);
+  const [keyword, setKeyword] = useState(urlKeyword || "");
 
   const { bucketItems } = useSelector((state) => state.bucketList);
   const { userInfo } = useSelector((state) => state.user);
@@ -230,6 +233,16 @@ const Navbar = () => {
     </Link>
   );
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (keyword) {
+      navigate(`/search/${keyword.trim()}`);
+      setKeyword("")
+    } else {
+      navigate("/")
+    }
+  }
+
   return (
     <header className="w-full lg:fixed h-auto lg:h-16 bg-white border-b z-50 py-6 lg:py-0">
       <div className="lg:max-w-[1480px] max-w-[600px] m-auto w-full h-full flex justify-between items-center">
@@ -240,7 +253,7 @@ const Navbar = () => {
         <nav
           className={`${
             toggle
-              ? "absolute top-8 right-0 mt-12 bg-indigo-100 p-2 px-8 py-0 rounded shadow-lg z-10"
+              ? "absolute top-8 right-0 mt-12 bg-white p-2 px-8 py-0 rounded z-10 border-t-2 border-gray-200 shadow-md"
               : "hidden"
           } lg:flex items-center justify-center w-full lg:w-auto`}
         >
@@ -251,12 +264,21 @@ const Navbar = () => {
           >
             <div className="lg:py-6 py-4 text-center mr-0 lg:mr-16">
               <div className="relative flex-grow lg:flex-grow-0 lg:mr-4 w-full lg:w-auto">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="lg:ml-4 p-2 rounded-md bg-blue-200 text-white sm:block w-full lg:w-80 px-2"
-                />
-                <FaSearch className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                <form onSubmit={handleSearch}>
+                  <input
+                    type="text"
+                    placeholder="Find your next luxury item..."
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    className="lg:ml-4 p-2 rounded-md bg-blue-200 text-white sm:block w-full lg:w-80 px-2"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  >
+                    <FaSearch className="text-gray-500" />
+                  </button>
+                </form>
               </div>
             </div>
 
@@ -367,7 +389,9 @@ const Navbar = () => {
           <img
             src={toggle ? close : menu}
             alt="menu"
-            className="h-8 w-auto px-4"
+            className={`h-8 w-auto px-4 mt-2 transition-transform duration-500 ease-in-out ${
+              toggle ? "rotate-180" : "rotate-0"
+            }`}
           />
         </div>
       </div>
