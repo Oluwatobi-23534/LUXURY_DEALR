@@ -43,7 +43,7 @@ const OrderDetailsPage = () => {
     amount,
     metadata: {
       name: userInfo.name || "N/A",
-      phone: userInfo.phone || "N/A",
+      phone: userInfo.phoneNumber || "N/A",
     },
     publicKey,
     text: "Pay Now",

@@ -1,5 +1,5 @@
 {
-  "name": "landing-page",
+  "name": "client",
   "version": "0.1.0",
   "proxy": "http://localhost:7000",
   "private": true,
