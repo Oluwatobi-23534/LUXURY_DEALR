@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
     "client": "npm run dev --prefix client",
-    "start": "node server/server.js",
+    "start": "NODE_ENV=production node server/server.js",
     "server": "nodemon server/server",
     "data:import": "node server/seeder",
     "data:destroyed": "node server/seeder -d",
