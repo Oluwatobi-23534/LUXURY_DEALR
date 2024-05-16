@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\" ",
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
     "client": "npm run dev --prefix client",
     "start": "node server/server.js",
     "server": "nodemon server/server",
     "data:import": "node server/seeder",
     "data:destroyed": "node server/seeder -d",
-    "build": "npm install && npm install --prefix client && npm run-build --prefix client"
+    "build": "npm install && npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
