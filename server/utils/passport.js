@@ -11,6 +11,7 @@ const passportSetup = (app) => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24, // 1 day
       },
+      store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }), // Use connect-mongo for session store
     })
   );
 
