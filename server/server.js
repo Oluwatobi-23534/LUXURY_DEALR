@@ -81,7 +81,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   app.use("/uploads", express.static(path.join(__dirname, "uploads")));
   app.get("/", (req, res) => {
-    res.send("Api is ✔️ ");
+    res.send("Api is ✔️ ")
   })
 }
 

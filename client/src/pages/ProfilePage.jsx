@@ -162,7 +162,7 @@ const ProfilePage = () => {
                   </td>
                   <td className="border border-blue-700 p-2 text-blue-800 text-center">
                     {" "}
-                    ${order.totalPrice}{" "}
+                    ₦{order.totalPrice}{" "}
                   </td>
                   <td className="border border-blue-700 p-2 text-blue-800 text-center">
                     {" "}
