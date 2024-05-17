@@ -3,9 +3,10 @@ import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
   server: {
-    port: 3000, 
+    port: 3000,
     proxy: {
-      "/api": "http://localhost:7000",
+      "/api": "https://luxury-dealr.onrender.com",
+      "/upload": "https://luxury-dealr.onrender.com",
     },
   },
   plugins: [react()],
