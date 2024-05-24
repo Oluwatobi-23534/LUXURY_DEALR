@@ -46,7 +46,7 @@ const Shipping = () => {
      // Save to local storage
      try {
        localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
-       console.log("Shipping address saved to localStorage");
+      
      } catch (error) {
        console.error("Error saving shipping address to localStorage:", error);
      }
