@@ -42,6 +42,7 @@ const ProductDetails = () => {
     }
   }, [isError, error]);
 
+
   const handleAddToBucket = (product) => {
     // Get the quantity for this product
     const quantity = quantities[product._id] || 1;
@@ -49,8 +50,20 @@ const ProductDetails = () => {
     // Add the product and quantity to the bucket
     dispatch(addToBucket({ ...product, qty: quantity }));
 
-    navigate("/bucketlist");
+    // Display a success toast message
+    toast.success("Product added to bucket list successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+    // navigate("/bucketlist");
   };
+
 
   const handleQuantityChange = (id, newQuantity) => {
     setQuantities({
@@ -124,7 +137,7 @@ const ProductDetails = () => {
                       {product.images.map((image, imageIndex) => (
                         <div key={imageIndex} className="w-full">
                           <img
-                            src={`http://localhost:7000${
+                            src={`https://luxury-dealr.onrender.com${
                               image.startsWith("/images/") ? "" : "/images/"
                             }${image}`}
                             alt={`${product.name} ${imageIndex + 1}`}

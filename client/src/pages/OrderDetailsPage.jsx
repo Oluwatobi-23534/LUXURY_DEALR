@@ -27,10 +27,11 @@ const OrderDetailsPage = () => {
 
   const calculateTotal = (orderItems) => {
     return orderItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + item.price * Number(item.qty), // Use qty here and ensure it's a number
       0
     );
   };
+
 
   const publicKey = "pk_test_3e5d96895f4d5046ed8a208eaa6958a624b1bd31"; // replace with your actual public key
   const email = userInfo.email; // replace with the actual email of the user
@@ -67,7 +68,7 @@ const OrderDetailsPage = () => {
 
 
   // Log the componentProps to the console
-  console.log("componentProps:", componentProps);
+  // console.log("componentProps:", componentProps);
 
   useEffect(() => {
     if (order) {
@@ -154,10 +155,10 @@ const OrderDetailsPage = () => {
                   {item.name}
                 </td>
                 <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center text-blue-600">
-                  {item.quantity}
+                  {item.qty} {/* Use qty here */}
                 </td>
                 <td className="px-1 sm:px-2 py-2 border-2 border-gray-200 text-center text-blue-600">
-                  ₦{(item.price * item.quantity).toFixed(2)}
+                  ₦{(item.price * item.qty).toFixed(2)} {/* Use qty here */}
                 </td>
               </tr>
             ))}

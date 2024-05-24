@@ -25,19 +25,29 @@ const PlaceOrder = () => {
  const handlePlaceOrder = async () => {
    try {
      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-     const res = await createOrder({
+
+     // Log the bucketItems to the console
+     console.log("bucketItems:", bucketItems);
+
+     const orderData = {
        orderItems: bucketItems.map((item) => ({
-         // Map over bucketItems to include the image field
          ...item,
-         image: item.images[0], // Assuming images is an array and you want to use the first image
+         qty: item.qty, // Include the quantity
+         totalItemPrice: item.price * item.qty, // Calculate and include the total item price
+         image: item.images[0],
        })),
        shippingAddress: { address, city, postalCode, country },
        paymentMethod,
        itemsPrice,
        totalPrice,
        token: userInfo.token, // Include the token in the order object
-     }).unwrap();
-     dispatch(clearBucketItems())
+     };
+
+     // Log the orderItems to the console
+     console.log("orderItems:", orderData.orderItems);
+
+     const res = await createOrder(orderData).unwrap();
+     dispatch(clearBucketItems());
      // Display a success toast message
      toast.success("Order placed successfully!");
      navigate(`/order/${res._id}`);
@@ -46,6 +56,8 @@ const PlaceOrder = () => {
      toast.error(error.data.message || error?.error);
    }
  };
+
+
 
 
 

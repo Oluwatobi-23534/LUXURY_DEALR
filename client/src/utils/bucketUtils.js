@@ -8,10 +8,14 @@ export const updateBucket = (bucketItems, item) => {
   const existItem = bucketItems.find((i) => i._id === item._id);
 
   if (existItem) {
-    // Update existing item
-    bucketItems = bucketItems.map((i) => (i._id === existItem._id ? item : i));
+    // If the item exists, increment its quantity
+    bucketItems = bucketItems.map((i) =>
+      i._id === existItem._id
+        ? { ...i, qty: Number(i.qty) + Number(item.qty) }
+        : i
+    );
   } else {
-    // Add new item to the bucket
+    // If the item doesn't exist, add it to the bucket
     bucketItems.push(item);
   }
 

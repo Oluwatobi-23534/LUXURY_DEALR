@@ -42,13 +42,13 @@ const SignIn = () => {
   // This function initiates the Google authentication process
   const handleGoogleAuth = () => {
   try {
-    window.location.href = `${BACKEND_URL}/auth/google/callback`;
+    window.location.href = `${BACKEND_URL}/auth/google/callback`; 
   } catch (error) {
     toast.error(error.data.message || error?.error);
   }
 };
 
-
+// `${BACKEND_URL}/auth/google/callback`;
 
   return (
     <div className="flex items-center justify-center h-screen bg-blue-300">
